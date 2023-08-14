@@ -7,7 +7,7 @@ import pandas as pd
 def get_traspose_data():
 
     # 读取 excel 文件
-    excel_file = '/Users/xinwang/Desktop/auto的副本/jk埋点.xlsx'
+    excel_file = 'I:/Buried-point-testing/jk埋点.xlsx'
 
     wb = load_workbook(excel_file)
 
@@ -20,6 +20,15 @@ def get_traspose_data():
     # 选择第1个工作表
     selected_sheet = wb[sheet_names[0]]
 
+
+    # 获取数据的起始行和结束行
+    start_row = selected_sheet.min_row
+    end_row = selected_sheet.max_row
+
+    # 获取数据的起始列和结束列
+    start_column = selected_sheet.min_column
+    end_column = selected_sheet.max_column
+
     # 选择指定范围内的数据（从1开始）
     # minx_row：起始行数
     # max_row：结束行数
@@ -28,7 +37,8 @@ def get_traspose_data():
 
     selected_data = []
 
-    for row in selected_sheet.iter_rows(min_row=4, max_row=33, min_col=1, max_col=25, values_only=True):
+    for row in selected_sheet.iter_rows(min_row = start_row, max_row = end_row, min_col = start_column, 
+                                        max_col = end_column, values_only=True):
         selected_data.append(row)
 
     # 将数据转换为DataFrame并进行转置
@@ -40,7 +50,7 @@ def get_traspose_data():
         new_sheet.append(row)
 
     # 保存工作簿
-    output_file = "/Users/xinwang/Desktop/auto的副本/jk埋点.xlsx"  # 替换为您的输出Excel文件路径
+    output_file = "I:/Buried-point-testing/jk埋点.xlsx"  # 替换为您的输出Excel文件路径
     wb.save(output_file)
 
     return
