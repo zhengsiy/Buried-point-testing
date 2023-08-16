@@ -35,10 +35,16 @@ def get_traspose_data():
     # min_col：起始列数
     # max_col：结束列数
 
+    # 获取第一行的数据
+    first_row_values = [cell.value for cell in selected_sheet[start_row] if cell.value]
+
     selected_data = []
 
-    for row in selected_sheet.iter_rows(min_row = start_row, max_row = end_row, min_col = start_column, 
+    for row in selected_sheet.iter_rows(min_row = start_row+1, max_row = end_row, min_col = start_column, 
                                         max_col = end_column, values_only=True):
+        
+        selected_data.append(first_row_values)
+        
         selected_data.append(row)
 
     # 将数据转换为DataFrame并进行转置

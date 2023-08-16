@@ -6,67 +6,63 @@ import pandas as pd
 
 def copy_arrange_data():
 
-    # 读取 excel 文件
-    excel_file = "I:/Buried-point-testing/jk埋点.xlsx"
+    def ATMlog_data():
 
-    wb = load_workbook(excel_file)
+        # 读取 excel 文件
+        excel_file = "I:/Buried-point-testing/ATMlog.xlsx"
 
-    # 创建一个名为“格式化后埋点用例”的新工作表
-    new_sheet = wb.create_sheet(title='格式化后埋点用例')
+        wb = load_workbook(excel_file)
 
-    # 获取所有工作表的名称
-    sheet_names = wb.sheetnames
+        # 创建一个名为“格式化后埋点用例”的新工作表
+        new_sheet = wb.create_sheet(title='测试结果')
 
-    # 选择第2个工作表
-    sheet2 = wb[sheet_names[1]]
+        # 获取所有工作表的名称
+        sheet_names = wb.sheetnames
 
-    # 提取第一列数据
-    first_column = [cell.value for cell in sheet2['A']]
+        # 选择查询数据表中的第1个工作表
+        sheet1 = wb[sheet_names[0]]
 
-    # 获取数据的起始行和结束行
-    start_row = sheet2.min_row
-    end_row = sheet2.max_row
+        # 删除第三列
+        sheet1.delete_cols(3)
 
-    # 获取数据的起始列和结束列
-    start_column = sheet2.min_column
-    end_column = sheet2.max_column
+        # 提取第五列数据
+        first_column = [cell.value for cell in sheet1['E']]
 
-
-    # 获取第二列及其之后的数据
-    all_columns = []
-    for column in sheet2.iter_cols(min_row = start_row, values_only = True):
-        all_columns.append(column)
+        # 保存工作簿，包含整理后的数据
+        output_file = "I:/Buried-point-testing/ATMlog.xlsx"
+        wb.save(output_file)
 
 
-   # 将数据放到单数列中
-    column_indices = [i for i in range(1, end_column, 2)]
-    while True:
-        for i, value in enumerate(all_columns):
-            if i % 2 != 0:
-                cell = new_sheet.cell(row = 1,column = column_indices)
-                for i, value in enumerate(first_column):
-                    cell = new_sheet.cell(row=i+1, column=1)
-                    cell.value = value
-            
-            else:
-                if i == end_column*2-2:
-                    break
-        break
-                 
+    def traspose_data():
+
+        excel_file2 = 'I:/Buried-point-testing/jk埋点.xlsx'
+
+        wb2 = load_workbook(excel_file2)
+
+         # 选择查询数据表中的第1个工作表
+        sheet_names = wb2.sheetnames
+
+        sheet1 = wb2[sheet_names[0]]
+
+        # 提取指定列的数据
+        column_indices = [1, 2, 4]
+
+         # 提取第1、2、4列数据
+        extracted_data = []
+        for row in sheet1.iter_rows():
+            row_data = [row[i - 1].value for i in column_indices]
+            extracted_data.append(row_data)
+
+
+    ATMlog_data()
+    traspose_data()
+
+    
+
+
+
+
         
-          
-
-        #else:
-         #   cell = new_sheet.cell(row = 1,column = i)
-          #  cell.value = value
-
-
-
-
-
-    # 保存工作簿，包含整理后的数据
-    output_file = "I:/Buried-point-testing/jk埋点.xlsx"
-    wb.save(output_file)
 
 
 copy_arrange_data()
