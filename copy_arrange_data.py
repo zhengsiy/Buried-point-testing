@@ -12,7 +12,7 @@ def ATMlog_data():
 
     source_workbook = load_workbook(excel_file)
 
-    source_sheet = source_workbook.active
+    source_sheet = source_workbook.worksheets[0]
 
     # 加载目标 excel 文件
     excel_file2 = 'I:/Buried-point-testing/jk埋点.xlsx'
@@ -38,7 +38,7 @@ def ATMlog_data():
     summary_table_sheet.delete_cols(3)
 
     # 提取第五列数据
-    first_column = [cell.value for col in summary_table_sheet.iter_cols(min_col=5, max_col=5) for cell in col]
+    fiveth_column = [cell.value for col in summary_table_sheet.iter_cols(min_col=5, max_col=5) for cell in col]
 
 
 
@@ -47,15 +47,17 @@ def ATMlog_data():
     target_workbook.save(output_file)
 
 
-#ATMlog_data()
+ATMlog_data()
 
 
-def result_table():
+def result_table(fiveth_column):
     '''处理查询出来的埋点数据，整理成结果表'''
     # 加载目标 excel 文件
     excel_file2 = 'I:/Buried-point-testing/jk埋点.xlsx'
 
     target_workbook = load_workbook(excel_file2)
+
+    #target_sheet = target_workbook.active
 
     # 创建一个名为“QQ埋点数据”的新工作表
     new_sheet = target_workbook.create_sheet(title="QQ埋点结果表")
@@ -66,23 +68,32 @@ def result_table():
     source_sheet = target_workbook.worksheets[0]
     target_sheet = target_workbook.worksheets[3]
 
-    # 指定要选中的列的索引
-    source_column_indices = [1, 2, 4]
+    # 提取第一个工作表的第1、2、4列数据
+    column1_data = [cell.value for cell in source_sheet['A']]
+    column2_data = [cell.value for cell in source_sheet['B']]
+    column4_data = [cell.value for cell in source_sheet['D']]
 
-    target_column_indices = [1, 2, 3]
+    # 将数据放置到第三个工作表的第1、2、3列中
+    for i, value in enumerate(column1_data):
+        target_sheet.cell(row=i+1, column=1, value=value)
 
-    # 将124列的内容放到QQ埋点数据表中
-    for source_index, target_index in zip(source_column_indices, target_column_indices):
-        source_column = [cell[0].value for cell in source_sheet.iter_cols(min_col=source_index, max_col=source_index)]
-        for row, value in enumerate(source_column, start=1):
-            target_sheet.cell(row=row, column=target_index, value=value)
+    for i, value in enumerate(column2_data):
+        target_sheet.cell(row=i+1, column=2, value=value)
 
-result_table()
- 
+    for i, value in enumerate(column4_data):
+        target_sheet.cell(row=i+1, column=3, value=value)
+
+    
+    # 保存工作簿，包含整理后的数据
+    output_file = 'I:/Buried-point-testing/jk埋点.xlsx'
+    target_workbook.save(output_file)
 
     
 
 
+
+
+result_table()
 
 
         
