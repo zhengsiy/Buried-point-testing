@@ -2,9 +2,11 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 import pandas as pd
+from get_jk_path import get_jk_path
 
 
-def ATMlog_data():
+def ATMlog_data():    # 将 ATMlog.xlsx 中的数据转移到jk埋点.xlsx 文件的埋点数据表中
+    '''将 ATMlog.xlsx 中的数据转移到jk埋点.xlsx 文件的埋点数据表中'''
 
     # 读取埋点源 excel 文件
     source_excel_file = "I:/Buried-point-testing/ATMlog.xlsx"
@@ -14,7 +16,7 @@ def ATMlog_data():
     source_sheet = source_workbook.worksheets[0]
 
     # 加载目标 excel 文件
-    excel_file2 = 'I:/Buried-point-testing/jk埋点.xlsx'
+    excel_file2 = get_jk_path()
 
     target_workbook = load_workbook(excel_file2)
 
@@ -35,22 +37,18 @@ def ATMlog_data():
     # 删除第三列
     summary_table_sheet.delete_cols(3)
 
-    # 提取第五列数据
-    # fiveth_column = [cell.value for col in summary_table_sheet.iter_cols(
-    #     min_col=5, max_col=5) for cell in col]
-
     # 保存工作簿，包含整理后的数据
-    output_file = 'I:/Buried-point-testing/jk埋点.xlsx'
+    output_file = get_jk_path()
     target_workbook.save(output_file)
 
 
-# ATMlog_data()
+ATMlog_data()
 
 
-def result_table(fiveth_column):
-    '''处理查询出来的埋点数据，整理成结果表'''
+def result_table():  # 将序号、分类、上报类型三列数据放置到结果表中，为了更好的对比查询出来的结果
+    '''将序号、分类、上报类型三列数据放置到结果表中，为了更好的对比查询出来的结果'''
     # 加载目标 excel 文件
-    excel_file2 = 'I:/Buried-point-testing/jk埋点.xlsx'
+    excel_file2 = get_jk_path()
 
     target_workbook = load_workbook(excel_file2)
 
@@ -81,27 +79,33 @@ def result_table(fiveth_column):
         target_sheet.cell(row=i+1, column=3, value=value)
 
     # 保存工作簿，包含整理后的数据
-    output_file = 'I:/Buried-point-testing/jk埋点.xlsx'
+    output_file = get_jk_path()
     target_workbook.save(output_file)
 
-# result_table()
+
+result_table()
 
 
-def find_data():
-    '''查找埋点数据中的需要的数据'''
+def find_data():  # 到埋点数据表中查找埋点结果表中需要的数据
+    '''到埋点数据表中查找埋点结果表中需要的数据'''
     # 读取JK埋点 excel 文件
-    excel_file2 = '/Users/xinwang/Desktop/zhengsiyu/Buried-point-testing/jk埋点.xlsx'
+    excel_file2 = get_jk_path()
 
     target_workbook = load_workbook(excel_file2)
-
-    # 创建一个名为“QQ埋点数据”的新工作表
-    new_sheet = target_workbook.create_sheet(title="临时中转表")
 
     # 选取埋点数据工作表
     data_sheet = target_workbook.worksheets[2]
 
     # 选取要匹配的数据
     match_data_sheet = target_workbook.worksheets[3]
+
+    # 获取数据的起始行和结束行
+    start_row = match_data_sheet.min_row
+    end_row = match_data_sheet.max_row
+
+    # 获取数据的起始列和结束列
+    start_column = match_data_sheet.min_column
+    end_column = match_data_sheet.max_column
 
     # 用于存储第二列的值
     second_column_values = []
@@ -128,19 +132,22 @@ def find_data():
             if source_item in target_row:
                 matched_list.append(target_row)
                 break
+        if source_item not in target_row:
+            matched_list.append('未查询到该数据')
 
-    return '全部数据'
+    # 在指定行插入title_list数据
+    for i, value in enumerate(title_list, start=1):
+        match_data_sheet.cell(row=start_row, column=end_column+i, value=value)
+
+     # 在指定行插入data_list数据
+    for row_num, data_row in enumerate(matched_list, start=1):
+        for col_idx, value in enumerate(data_row, start=1):
+            match_data_sheet.cell(row=start_row + row_num,
+                                  column=end_column + col_idx, value=value)
+
+    # 保存工作簿，包含整理后的数据
+    output_file = get_jk_path()
+    target_workbook.save(output_file)
 
 
 find_data()
-
-
-def second_data:
-
-
-first_data = find_data()
-
-second_data = second_data(first_data)
-
-
-third_data = third_data(second_data)
