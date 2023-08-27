@@ -2,12 +2,13 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 import pandas as pd
+from get_jk_path import get_jk_path
 
 
 def result_traspose():  # 将最后的结果表进行转置
     '''将最后的结果表进行转置'''
     # 读取 excel 文件
-    excel_file = '/Users/xinwang/Desktop/zhengsiyu/Buried-point-testing/jk埋点.xlsx'
+    excel_file = get_jk_path()
 
     wb = load_workbook(excel_file)
 
