@@ -1,17 +1,15 @@
 from openpyxl import load_workbook
-from openpyxl import Workbook
-from openpyxl.utils.dataframe import dataframe_to_rows
-import pandas as pd
 from get_jk_path import get_jk_path
+from get_jk_path import get_ATMlog_path
 
 
 def ATMlog_data():    # 将 ATMlog.xlsx 中的数据转移到jk埋点.xlsx 文件的埋点数据表中
     '''将 ATMlog.xlsx 中的数据转移到jk埋点.xlsx 文件的埋点数据表中'''
 
     # 读取埋点源 excel 文件
-    source_excel_file = "I:/Buried-point-testing/ATMlog.xlsx"
+    source_excel_file = get_ATMlog_path()
 
-    source_workbook = load_workbook(excel_file)
+    source_workbook = load_workbook(source_excel_file)
 
     source_sheet = source_workbook.worksheets[0]
 
@@ -57,8 +55,6 @@ def result_table():  # 将序号、分类、上报类型三列数据放置到结
     # 创建一个名为“QQ埋点数据”的新工作表
     new_sheet = target_workbook.create_sheet(title="QQ埋点结果表")
 
-    sheets = target_workbook.sheetnames
-
     # 选择源数据表和目标数据表
     source_sheet = target_workbook.worksheets[0]
     target_sheet = target_workbook.worksheets[3]
@@ -101,10 +97,8 @@ def find_data():  # 到埋点数据表中查找埋点结果表中需要的数据
 
     # 获取数据的起始行和结束行
     start_row = match_data_sheet.min_row
-    end_row = match_data_sheet.max_row
 
     # 获取数据的起始列和结束列
-    start_column = match_data_sheet.min_column
     end_column = match_data_sheet.max_column
 
     # 用于存储第二列的值

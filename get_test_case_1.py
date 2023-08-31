@@ -58,7 +58,7 @@ def get_traspose_data():
         new_sheet.append(row)
 
     # 保存工作簿
-    output_file = "I:/Buried-point-testing/jk埋点.xlsx"  # 替换为您的输出Excel文件路径
+    output_file = get_jk_path()  # 替换为您的输出Excel文件路径
     wb.save(output_file)
 
     return

@@ -1,5 +1,4 @@
 from openpyxl import load_workbook
-from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 import pandas as pd
 from get_jk_path import get_jk_path
@@ -47,7 +46,7 @@ def result_traspose():  # 将最后的结果表进行转置
 
     # 保存工作簿
     # 替换为您的输出Excel文件路径
-    output_file = "/Users/xinwang/Desktop/zhengsiyu/Buried-point-testing/jk埋点.xlsx"
+    output_file = get_jk_path()
     wb.save(output_file)
 
 
